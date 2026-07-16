@@ -18,5 +18,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Verify Workflow
-        run: echo "GitHub Actions is working successfully!"
+      - name: Install Dependencies
+        run: |
+          pip install feedparser
+
+      - name: Run RSS Reader
+        run: |
+          python scripts/rss_reader.py
