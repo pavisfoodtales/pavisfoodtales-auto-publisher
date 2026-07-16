@@ -9,6 +9,11 @@ jobs:
   autopost:
     runs-on: ubuntu-latest
 
+    env:
+      BLOG_ID: ${{ secrets.BLOG_ID }}
+      REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+      GOOGLE_CLIENT_SECRET_JSON: ${{ secrets.GOOGLE_CLIENT_SECRET_JSON }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -20,8 +25,13 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install feedparser
+          python -m pip install --upgrade pip
+          pip install feedparser google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client requests
 
       - name: Run RSS Reader
         run: |
           python scripts/rss_reader.py
+
+      - name: Run Blogger API
+        run: |
+          python scripts/blogger_api.py
