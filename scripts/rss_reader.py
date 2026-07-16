@@ -4,11 +4,17 @@ RSS_URL = "https://exploringcookingfood.blogspot.com/feeds/posts/default?alt=rss
 
 feed = feedparser.parse(RSS_URL)
 
-print(f"Blog Title: {feed.feed.title}")
-print(f"Total Posts Found: {len(feed.entries)}")
+if not feed.entries:
+    print("No posts found.")
+    exit()
 
-if feed.entries:
-    latest = feed.entries[0]
-    print("\nLatest Post")
-    print("Title:", latest.title)
-    print("Link :", latest.link)
+latest = feed.entries[0]
+
+print("Latest Post")
+print("------------")
+print("Title:", latest.title)
+print("Link:", latest.link)
+print("Published:", latest.published)
+
+if "summary" in latest:
+    print("Summary:", latest.summary[:300])
