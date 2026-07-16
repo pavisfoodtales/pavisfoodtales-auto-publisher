@@ -4,17 +4,17 @@ RSS_URL = "https://exploringcookingfood.blogspot.com/feeds/posts/default?alt=rss
 
 feed = feedparser.parse(RSS_URL)
 
-if not feed.entries:
-    print("No posts found.")
-    exit()
+print("=" * 60)
+print(f"Blog Title : {feed.feed.title}")
+print(f"Total Posts Found : {len(feed.entries)}")
+print("=" * 60)
 
-latest = feed.entries[0]
+for index, post in enumerate(feed.entries, start=1):
+    print(f"\nPost #{index}")
+    print(f"Title      : {post.title}")
+    print(f"Published  : {post.published}")
+    print(f"Link       : {post.link}")
 
-print("Latest Post")
-print("------------")
-print("Title:", latest.title)
-print("Link:", latest.link)
-print("Published:", latest.published)
-
-if "summary" in latest:
-    print("Summary:", latest.summary[:300])
+    if "summary" in post:
+        summary = post.summary.replace("\n", " ").strip()
+        print(f"Summary    : {summary[:150]}...")
