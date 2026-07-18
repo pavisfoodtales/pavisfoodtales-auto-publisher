@@ -1,6 +1,6 @@
 import feedparser
 
-RSS_URL = "https://exploringcookingfood.blogspot.com/feeds/posts/default?alt=rss&max-results=500"
+RSS_URL = "https://exploringcookingfood.blogspot.com/feeds/posts/default?alt=rss"
 
 feed = feedparser.parse(RSS_URL)
 
