@@ -20,12 +20,15 @@ if not CLIENT_SECRET_JSON:
 # Load OAuth client credentials
 client = json.loads(CLIENT_SECRET_JSON)
 
+# Use Web Application OAuth credentials
+client_info = client["web"]
+
 creds = Credentials(
     token=None,
     refresh_token=REFRESH_TOKEN,
     token_uri="https://oauth2.googleapis.com/token",
-    client_id=client["installed"]["client_id"],
-    client_secret=client["installed"]["client_secret"],
+    client_id=client_info["client_id"],
+    client_secret=client_info["client_secret"],
 )
 
 # Connect to Blogger API
@@ -34,7 +37,10 @@ service = build("blogger", "v3", credentials=creds)
 # Get latest posts
 posts = (
     service.posts()
-    .list(blogId=BLOG_ID, maxResults=5)
+    .list(
+        blogId=BLOG_ID,
+        maxResults=5
+    )
     .execute()
 )
 
