@@ -1,4 +1,5 @@
 import feedparser
+import re
 
 RSS_URL = "https://exploringcookingfood.blogspot.com/feeds/posts/default?alt=rss"
 
@@ -11,12 +12,17 @@ def get_latest_blog():
 
     post = feed.entries[0]
 
+    summary = post.summary if "summary" in post else ""
+
+    image_match = re.search(r'<img[^>]+src="([^"]+)"', summary)
+    image = image_match.group(1) if image_match else None
+
     return {
         "title": post.title,
         "link": post.link,
         "published": post.published,
-        "summary": post.summary if "summary" in post else "",
-        "image": post.media_content[0]["url"] if "media_content" in post else None,
+        "summary": summary,
+        "image": image,
     }
 
 
