@@ -2,7 +2,6 @@ import os
 from openai import OpenAI
 
 from blog_data import get_latest_blog
-from ai_models import MODELS
 
 
 def generate_caption():
@@ -41,40 +40,36 @@ Requirements:
 - Do NOT invent ingredients.
 """
 
-    for model in MODELS:
-        print(f"Trying model: {model}")
+    try:
+        print("Using OpenRouter Free Models Router...")
 
-        try:
-            response = client.chat.completions.create(
-                model=model,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "You are an expert food blogger and social media marketer."
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                temperature=0.8,
-                max_tokens=300,
-                extra_headers={
-                    "HTTP-Referer": "https://github.com/pavisfoodtales/pavisfoodtales-auto-publisher",
-                    "X-Title": "Pavi's Food Tales Auto Publisher"
+        response = client.chat.completions.create(
+            model="openrouter/free",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an expert food blogger and social media marketer."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
                 }
-            )
+            ],
+            temperature=0.8,
+            max_tokens=300,
+            extra_headers={
+                "HTTP-Referer": "https://github.com/pavisfoodtales/pavisfoodtales-auto-publisher",
+                "X-Title": "Pavi's Food Tales Auto Publisher"
+            }
+        )
 
-            print(f"Success with {model}")
-            return response.choices[0].message.content.strip()
+        print("Caption generated successfully!")
+        return response.choices[0].message.content.strip()
 
-        except Exception as e:
-            print(f"{model} failed.")
-            print(e)
-            continue
-
-    print("All AI models failed.")
-    return None
+    except Exception as e:
+        print("AI Error:")
+        print(e)
+        return None
 
 
 if __name__ == "__main__":
