@@ -29,8 +29,7 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install feedparser google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client requests
-
+          pip install feedparser google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client requests google-genai
       - name: Test AI Caption
         run: |
           python scripts/test_ai_caption.py
