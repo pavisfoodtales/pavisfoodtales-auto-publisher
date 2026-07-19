@@ -1,5 +1,5 @@
 import os
-from google import genai
+from openai import OpenAI
 
 from blog_data import get_latest_blog
 
@@ -10,8 +10,9 @@ def generate_caption():
     if not blog:
         return None
 
-    client = genai.Client(
-        api_key=os.environ["GEMINI_API_KEY"]
+    client = OpenAI(
+        api_key=os.environ["OPENROUTER_API_KEY"],
+        base_url="https://openrouter.ai/api/v1",
     )
 
     prompt = f"""
@@ -29,22 +30,33 @@ Recipe Link:
 {blog['link']}
 
 Requirements:
-- Friendly and natural English
-- Maximum 180 words
-- Use suitable food emojis
-- Create curiosity
-- End with a strong Call-to-Action
-- Add 8-10 relevant hashtags
-- Do NOT mention AI
-- Do NOT invent ingredients
+- Friendly and natural English.
+- Maximum 180 words.
+- Use suitable food emojis.
+- Create curiosity.
+- End with a strong Call-to-Action.
+- Add 8-10 relevant hashtags.
+- Do NOT mention AI.
+- Do NOT invent ingredients.
 """
 
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=prompt,
+    response = client.chat.completions.create(
+        model="deepseek/deepseek-chat-v3-0324:free",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an expert food blogger and social media marketer."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.8,
+        max_tokens=300,
     )
 
-    return response.text.strip()
+    return response.choices[0].message.content.strip()
 
 
 if __name__ == "__main__":
