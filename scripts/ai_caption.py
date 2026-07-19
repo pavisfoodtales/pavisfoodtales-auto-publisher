@@ -28,19 +28,19 @@ Recipe Summary:
 Recipe Link:
 {blog['link']}
 
-Instructions:
-- Write in natural, friendly English.
-- Make readers curious to click.
-- Use suitable food emojis.
-- Keep it under 180 words.
-- Do NOT mention AI.
-- Do NOT invent ingredients.
-- End with a strong Call-to-Action.
-- Add 8-10 relevant hashtags.
+Requirements:
+- Friendly and natural English
+- Maximum 180 words
+- Use suitable food emojis
+- Create curiosity
+- End with a strong Call-to-Action
+- Add 8-10 relevant hashtags
+- Do NOT mention AI
+- Do NOT invent ingredients
 """
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash-lite",
+        model="gemini-2.0-flash",
         contents=prompt,
     )
 
