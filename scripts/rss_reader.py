@@ -1,20 +1,42 @@
 import feedparser
+import os
 
 RSS_URL = "https://exploringcookingfood.blogspot.com/feeds/posts/default?alt=rss"
+LAST_POST_FILE = "data/last_post.txt"
 
 feed = feedparser.parse(RSS_URL)
 
+if not feed.entries:
+    print("No posts found.")
+    exit()
+
+# Get the latest post
+latest_post = feed.entries[0]
+
+title = latest_post.title
+link = latest_post.link
+
 print("=" * 60)
-print(f"Blog Title : {feed.feed.title}")
-print(f"Total Posts Found : {len(feed.entries)}")
+print("Latest Blog Post")
+print("=" * 60)
+print(f"Title : {title}")
+print(f"Link  : {link}")
 print("=" * 60)
 
-for index, post in enumerate(feed.entries, start=1):
-    print(f"\nPost #{index}")
-    print(f"Title      : {post.title}")
-    print(f"Published  : {post.published}")
-    print(f"Link       : {post.link}")
+# Read previously processed post
+last_link = ""
 
-    if "summary" in post:
-        summary = post.summary.replace("\n", " ").strip()
-        print(f"Summary    : {summary[:150]}...")
+if os.path.exists(LAST_POST_FILE):
+    with open(LAST_POST_FILE, "r", encoding="utf-8") as f:
+        last_link = f.read().strip()
+
+# Compare
+if last_link == link:
+    print("No new blog post found.")
+else:
+    print("New blog post detected!")
+
+    with open(LAST_POST_FILE, "w", encoding="utf-8") as f:
+        f.write(link)
+
+    print("last_post.txt updated successfully.")
