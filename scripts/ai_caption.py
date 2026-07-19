@@ -1,3 +1,6 @@
+import os
+from google import genai
+
 from blog_data import get_latest_blog
 
 
@@ -7,18 +10,39 @@ def generate_caption():
     if not blog:
         return None
 
-    caption = f"""
-🍽️ {blog['title']}
+    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
-{blog['summary'][:250]}...
+    prompt = f"""
+You are a professional food blogger and social media marketer.
 
-👉 Read the full recipe:
+Write a highly engaging Facebook post about this recipe.
+
+Recipe Title:
+{blog['title']}
+
+Recipe Summary:
+{blog['summary']}
+
+Recipe Link:
 {blog['link']}
 
-#Food #Recipe #Cooking #PavisFoodTales
+Requirements:
+- Write in friendly, natural English.
+- Use emojis.
+- Create curiosity.
+- End with a strong Call To Action.
+- Include 8-10 relevant hashtags.
+- Do NOT mention AI.
+- Do NOT invent ingredients.
+- Maximum 180 words.
 """
 
-    return caption.strip()
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+    )
+
+    return response.text.strip()
 
 
 if __name__ == "__main__":
