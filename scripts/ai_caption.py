@@ -54,6 +54,10 @@ Requirements:
         ],
         temperature=0.8,
         max_tokens=300,
+        extra_headers={
+            "HTTP-Referer": "https://github.com/pavisfoodtales/pavisfoodtales-auto-publisher",
+            "X-Title": "Pavi's Food Tales Auto Publisher"
+        }
     )
 
     return response.choices[0].message.content.strip()
