@@ -9,6 +9,9 @@ jobs:
   autopost:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     env:
       BLOG_ID: ${{ secrets.BLOG_ID }}
       REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
@@ -31,6 +34,14 @@ jobs:
       - name: Run RSS Reader
         run: |
           python scripts/rss_reader.py
+
+      - name: Save last_post.txt
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add data/last_post.txt
+          git diff --cached --quiet || git commit -m "Update last processed post"
+          git push
 
       - name: Run Blogger API
         run: |
